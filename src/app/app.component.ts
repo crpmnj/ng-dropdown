@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Component } from '@angular/core';
 import { DropdownItem } from './data-types/dropdown-item.interface';
+import { DropdownConfig } from './config/config.interface';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,12 @@ export class AppComponent {
 
   constructor() {
     this.Refresh();
+  }
+
+  protected get Config(): DropdownConfig {
+    return {
+      multiSelect: true,
+    };
   }
 
   protected get Selected(): uuidv4 {

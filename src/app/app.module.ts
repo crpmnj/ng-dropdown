@@ -6,6 +6,7 @@ import { TemplateNameDirective } from './directives/template-name.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { IterableMapPipe } from './pipes/iterable-map.pipe';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { LimitPipe } from './pipes/limit.pipe';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     DropdownComponent,
     IterableMapPipe,
     ClickOutsideDirective,
+    LimitPipe,
   ],
   imports: [
     BrowserModule

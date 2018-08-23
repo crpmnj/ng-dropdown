@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter, ContentChildren, QueryList,
   OnChanges, SimpleChanges, ElementRef } from '@angular/core';
 import { TemplateNameDirective } from '../../directives/template-name.directive';
 import { DropdownItem } from '../../data-types/dropdown-item.interface';
+import { DropdownConfig } from '../../config/config.interface';
+import { DefaultConfig } from '../../config/default.config';
 
 @Component({
   selector: 'app-dropdown',
@@ -15,7 +17,7 @@ export class DropdownComponent implements OnChanges {
 
   @Input() public items: DropdownItem<any, any>[];
 
-  @Input() public multiSelect = false;
+  @Input() public config: DropdownConfig = DefaultConfig;
 
   @ContentChildren(TemplateNameDirective) templates: QueryList<TemplateNameDirective>;
 
@@ -39,13 +41,12 @@ export class DropdownComponent implements OnChanges {
   }
 
   protected Select(item: DropdownItem<any, any>): void {
-    if (this.multiSelect) {
+    if (this.config.multiSelect) {
       if (this._selectedItems.has(item.id)) {
         this._selectedItems.delete(item.id);
-      } else {
+      } else if (!this.config.multiSelectLimit || this._selectedItems.size < this.config.multiSelectLimit) {
         this._selectedItems.set(item.id, item.data);
       }
-      console.log(this._selectedItems);
       this.modelChange.emit(Array.from(this._selectedItems.values()));
     } else {
       this.modelChange.emit(item.data);
@@ -69,6 +70,9 @@ export class DropdownComponent implements OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.config) {
+      this.config = Object.assign({}, DefaultConfig, this.config);
+    }
     if (changes.items) {
       this.ItemsChanged();
     }
