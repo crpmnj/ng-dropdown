@@ -1,3 +1,9 @@
-<p>
-  dropdown works!
-</p>
+<div class="dropdown">
+  <div class="title">{{ model }}</div>
+  <div class="option">
+    <div class="group" *ngFor="let group of Groups | async">
+      <div class="group_name">{{ group.name }}</div>
+      <div class="option" *ngFor="let item of group.items" (click)="OnSelect(item)">{{ item.data }}</div>
+    </div>
+  </div>
+</div>
