@@ -1,13 +1,12 @@
 import { Component, Input, Output, EventEmitter, ContentChildren, QueryList,
   OnChanges, SimpleChanges, HostListener, ElementRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TemplateNameDirective } from '../../directives/template-name.directive';
 import { DropdownItem } from '../../data-types/dropdown-item.interface';
 
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.css']
+  styleUrls: ['./dropdown.component.scss']
 })
 export class DropdownComponent implements OnChanges {
 
@@ -15,6 +14,8 @@ export class DropdownComponent implements OnChanges {
   @Output() public modelChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() public items: DropdownItem<any, any>[];
+
+  @Input() public multiSelect = false;
 
   @ContentChildren(TemplateNameDirective) templates: QueryList<TemplateNameDirective>;
 
@@ -31,8 +32,8 @@ export class DropdownComponent implements OnChanges {
     return this._groups;
   }
 
-  protected OnSelect(item: any): void {
-    console.log('selected', item);
+  protected Select(item: DropdownItem<any, any>): void {
+    this.modelChange.emit(item.data);
   }
 
   protected ItemsChanged(): void {
@@ -48,21 +49,13 @@ export class DropdownComponent implements OnChanges {
   }
 
   public Close(): void {
+    console.log('closed');
     this._open = false;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.items) {
       this.ItemsChanged();
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
-  protected onClick($event: MouseEvent): void {
-    if (this._open) {
-      if (!this.eRef.nativeElement.contains($event.target)) {
-        this.Close();
-      }
     }
   }
 

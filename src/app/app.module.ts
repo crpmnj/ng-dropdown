@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { TemplateNameDirective } from './directives/template-name.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { IterableMapPipe } from './pipes/iterable-map.pipe';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
 
 
 @NgModule({
@@ -13,9 +14,13 @@ import { IterableMapPipe } from './pipes/iterable-map.pipe';
     TemplateNameDirective,
     DropdownComponent,
     IterableMapPipe,
+    ClickOutsideDirective,
   ],
   imports: [
     BrowserModule
+  ],
+  exports: [
+    ClickOutsideDirective,
   ],
   providers: [],
   bootstrap: [AppComponent]

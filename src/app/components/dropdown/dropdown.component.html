@@ -1,10 +1,9 @@
-<div class="dropdown">
-  <div class="title">{{ model }}</div>
+<div class="dropdown" (clickOutside)="Close($event)">
+  <div class="title">selected: {{ model }}</div>
   <div class="option">
     <div class="group" *ngFor="let group of Groups | iterableMap">
       <div class="group_name" *ngIf="group.key">{{ group.key }}</div>
-      <div class="option" *ngFor="let item of group.value" (click)="OnSelect(item)">{{ item.data }}</div>
-      <br />
+      <div class="option" *ngFor="let item of group.value" (click)="Select(item)">{{ item.data }}</div>
     </div>
   </div>
 </div>

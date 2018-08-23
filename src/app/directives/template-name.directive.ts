@@ -1,7 +1,7 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[appTemplateName]'
+  selector: '[templateName]'
 })
 export class TemplateNameDirective {
 

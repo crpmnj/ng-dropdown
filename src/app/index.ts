@@ -1,4 +1,5 @@
 export { TemplateNameDirective } from './directives/template-name.directive';
+export { ClickOutsideDirective } from './directives/click-outside.directive';
 
 export { DropdownComponent } from './components/dropdown/dropdown.component';
 
