@@ -1,5 +1,10 @@
 <div class="dropdown" (clickOutside)="Close($event)">
-  <div class="title">selected: {{ model }}</div>
+  <span>Selected:</span>
+  <br>
+  <div class="selected_item" *ngIf="!multiSelect">{{ model }}</div>
+  <div class="selected_items" *ngIf="multiSelect">
+    <div class="selected_badge" *ngFor="let item of model">{{ item }}</div>
+  </div>
   <div class="option">
     <div class="group" *ngFor="let group of Groups | iterableMap">
       <div class="group_name" *ngIf="group.key">{{ group.key }}</div>

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ContentChildren, QueryList,
-  OnChanges, SimpleChanges, HostListener, ElementRef } from '@angular/core';
+  OnChanges, SimpleChanges, ElementRef } from '@angular/core';
 import { TemplateNameDirective } from '../../directives/template-name.directive';
 import { DropdownItem } from '../../data-types/dropdown-item.interface';
 
@@ -23,17 +23,33 @@ export class DropdownComponent implements OnChanges {
   protected _selected = null;
 
   protected _groups: Map<string, DropdownItem<any, any>[]>;
+  protected _selectedItems?: Map<string, any>;
 
   constructor(protected eRef: ElementRef) {
     this._groups = new Map<string, DropdownItem<any, any>[]>();
+    this._selectedItems = new Map<string, any>();
   }
 
   protected get Groups(): Map<string, DropdownItem<any, any>[]> {
     return this._groups;
   }
 
+  protected get SelectedItems(): Map<string, any> {
+    return this._selectedItems;
+  }
+
   protected Select(item: DropdownItem<any, any>): void {
-    this.modelChange.emit(item.data);
+    if (this.multiSelect) {
+      if (this._selectedItems.has(item.id)) {
+        this._selectedItems.delete(item.id);
+      } else {
+        this._selectedItems.set(item.id, item.data);
+      }
+      console.log(this._selectedItems);
+      this.modelChange.emit(Array.from(this._selectedItems.values()));
+    } else {
+      this.modelChange.emit(item.data);
+    }
   }
 
   protected ItemsChanged(): void {
@@ -49,7 +65,6 @@ export class DropdownComponent implements OnChanges {
   }
 
   public Close(): void {
-    console.log('closed');
     this._open = false;
   }
 

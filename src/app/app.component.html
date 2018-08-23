@@ -1,1 +1,10 @@
-<app-dropdown [items]="Items" [(model)]="Selected"></app-dropdown>
+<button (click)="Refresh()">Refresh</button>
+
+<div class="tabs">
+  <div class="tab">
+    <app-dropdown [items]="Items" [(model)]="Selected"></app-dropdown>
+  </div>
+  <div class="tab">
+    <app-dropdown [items]="Items" [(model)]="SelectedItems" [multiSelect]="true"></app-dropdown>
+  </div>
+</div>
