@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Component } from '@angular/core';
-import { DropdownItems } from '.';
+import { DropdownItem } from './data-types/dropdown-item.interface';
 
 @Component({
   selector: 'app-root',
@@ -9,22 +9,29 @@ import { DropdownItems } from '.';
 })
 export class AppComponent {
 
-  protected _items: DropdownItems;
+  protected _items: DropdownItem<uuidv4, uuidv4>[];
   protected _selected: uuidv4;
 
   constructor() {
-    this._items = new DropdownItems();
-    for (let i = 0; i < 5; i++) {
-      this._items.set(uuidv4(), uuidv4());
-    }
+    this._items = [];
   }
 
   protected get Selected(): uuidv4 {
     return this._selected;
   }
 
-  protected get Items(): DropdownItems {
+  protected get Items(): DropdownItem<uuidv4, uuidv4>[] {
     return this._items;
+  }
+
+  public Refresh(): void {
+    this._items = [];
+    for (let i = 0; i < 5; i++) {
+      this._items.push({ id: uuidv4(), data: uuidv4() });
+    }
+    this._items[1].groupBy = 'first group';
+    this._items[2].groupBy = 'first group';
+    this._items[0].groupBy = 'second group';
   }
 
 }

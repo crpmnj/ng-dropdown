@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { TemplateNameDirective } from './directives/template-name.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { IterableMapPipe } from './pipes/iterable-map.pipe';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
     AppComponent,
     TemplateNameDirective,
     DropdownComponent,
+    IterableMapPipe,
   ],
   imports: [
     BrowserModule

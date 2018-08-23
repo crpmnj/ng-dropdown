@@ -1,1 +1,3 @@
-<app-dropdown [items]="Items" [(model)]="Selected"></app-dropdown>
+<app-dropdown [items]="_items" [(model)]="Selected"></app-dropdown>
+
+<button (click)="Refresh()">Refresh</button>
