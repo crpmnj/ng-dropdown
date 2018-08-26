@@ -53,6 +53,10 @@ export class DropdownComponent implements OnChanges {
     }
   }
 
+  /**
+   * Generate new groups Map, when items changed outside.
+   * Items without groupname add into `null` key array
+   */
   protected ItemsChanged(): void {
     const groups = new Map<string, DropdownItem<any, any>[]>();
     this.items.forEach(item => {

@@ -1,10 +1,15 @@
 <button (click)="Refresh()">Refresh</button>
 
-<div class="tabs">
-  <div class="tab">
-    <app-dropdown [items]="Items" [(model)]="Selected"></app-dropdown>
-  </div>
-  <div class="tab">
-    <app-dropdown [items]="Items" [(model)]="SelectedItems" [config]="Config"></app-dropdown>
+
+<div class="app">
+  <div class="tabs">
+    <div class="tab">
+      <div class="title">Single choise</div>
+      <app-dropdown [items]="Items | dropdownItemsFromArray: 'id'" [(model)]="Selected"></app-dropdown>
+    </div>
+    <div class="tab">
+      <div class="title">Multiple choises</div>
+      <app-dropdown [items]="Items" [(model)]="SelectedItems" [config]="Config"></app-dropdown>
+    </div>
   </div>
 </div>

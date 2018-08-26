@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Component } from '@angular/core';
 import { DropdownItem } from './data-types/dropdown-item.interface';
 import { DropdownConfig } from './config/config.interface';
+import { Place } from './example/place.class';
+import { Country } from './example/country.class';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,8 @@ import { DropdownConfig } from './config/config.interface';
 })
 export class AppComponent {
 
-  protected _items: DropdownItem<uuidv4, uuidv4>[];
+  protected _items: any[];
+  protected _dropdownItems: DropdownItem<uuidv4, uuidv4>[];
   protected _selected: uuidv4;
   protected _selectedItems: uuidv4[];
 
@@ -40,18 +43,25 @@ export class AppComponent {
     this._selectedItems = value;
   }
 
-  protected get Items(): DropdownItem<uuidv4, uuidv4>[] {
+  protected get Items(): any[] {
     return this._items;
   }
 
   public Refresh(): void {
-    this._items = [];
-    for (let i = 0; i < 5; i++) {
-      this._items.push({ id: uuidv4(), data: uuidv4() });
-    }
-    this._items[1].groupBy = 'first group';
-    this._items[2].groupBy = 'first group';
-    this._items[0].groupBy = 'second group';
+    const russia: Country = { id: uuidv4(), name: 'Россия' };
+    const belgium: Country = { id: uuidv4(), name: 'Бельгия' };
+    const france: Country = { id: uuidv4(), name: 'Франция' };
+    const items: Place[] = [];
+    items.push({ id: uuidv4(), name: 'Москва', country: russia });
+    items.push({ id: uuidv4(), name: 'Рязань', country: russia });
+    items.push({ id: uuidv4(), name: 'Санкт-Петербург', country: russia });
+    items.push({ id: uuidv4(), name: 'Казань', country: russia });
+    items.push({ id: uuidv4(), name: 'Париж', country: france });
+    items.push({ id: uuidv4(), name: 'Орлеан', country: france });
+    items.push({ id: uuidv4(), name: 'Лион', country: france });
+    items.push({ id: uuidv4(), name: 'Брюсель', country: belgium });
+    items.push({ id: uuidv4(), name: 'Брюгге', country: belgium });
+    this._items = items;
   }
 
 }

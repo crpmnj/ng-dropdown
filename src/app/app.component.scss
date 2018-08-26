@@ -1,3 +1,17 @@
+.app {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  margin: 0 auto;
+  width: 500px;
+}
+
 .tabs {
-  display: flex;
+  .tab {
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    margin: 5px 0;
+  }
 }

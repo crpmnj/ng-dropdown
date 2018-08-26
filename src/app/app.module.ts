@@ -7,6 +7,7 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { IterableMapPipe } from './pipes/iterable-map.pipe';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { LimitPipe } from './pipes/limit.pipe';
+import { DropdownItemsFromArrayPipe } from './pipes/dropdown-items-from-array.pipe';
 
 
 @NgModule({
@@ -17,12 +18,10 @@ import { LimitPipe } from './pipes/limit.pipe';
     IterableMapPipe,
     ClickOutsideDirective,
     LimitPipe,
+    DropdownItemsFromArrayPipe,
   ],
   imports: [
     BrowserModule
-  ],
-  exports: [
-    ClickOutsideDirective,
   ],
   providers: [],
   bootstrap: [AppComponent]
