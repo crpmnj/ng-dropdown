@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, ContentChildren, QueryList,
-  OnChanges, SimpleChanges, ElementRef } from '@angular/core';
+  OnChanges, SimpleChanges, ElementRef, TemplateRef } from '@angular/core';
 import { TemplateNameDirective } from '../../directives/template-name.directive';
-import { DropdownItem } from '../../data-types/dropdown-item.interface';
-import { DropdownConfig } from '../../config/config.interface';
 import { DefaultConfig } from '../../config/default.config';
+import { DropdownConfig } from '../../config/config.interface';
+import { DropdownItem } from '../../data-types/dropdown-item.interface';
 
 @Component({
   selector: 'app-dropdown',
@@ -12,10 +12,10 @@ import { DefaultConfig } from '../../config/default.config';
 })
 export class DropdownComponent implements OnChanges {
 
-  @Input() public model: any;
+  @Input() public model: any | any[];
   @Output() public modelChange: EventEmitter<any> = new EventEmitter<any>();
 
-  @Input() public items: DropdownItem<any, any>[];
+  @Input() public items: any[];
 
   @Input() public config: DropdownConfig = DefaultConfig;
 
@@ -24,61 +24,127 @@ export class DropdownComponent implements OnChanges {
   protected _open = false;
   protected _selected = null;
 
-  protected _groups: Map<string, DropdownItem<any, any>[]>;
-  protected _selectedItems?: Map<string, any>;
+  protected _selectedItems: DropdownItem[];
+  protected _ungroupedItems: DropdownItem[];
+  protected _groupedItems = new Map<string, DropdownItem[]>();
 
-  constructor(protected eRef: ElementRef) {
-    this._groups = new Map<string, DropdownItem<any, any>[]>();
-    this._selectedItems = new Map<string, any>();
+  constructor(protected eRef: ElementRef) { }
+
+  public get Groups(): Map<string, DropdownItem[]> {
+    return this._groupedItems;
   }
 
-  protected get Groups(): Map<string, DropdownItem<any, any>[]> {
-    return this._groups;
-  }
-
-  protected get SelectedItems(): Map<string, any> {
+  public get Selected(): DropdownItem[] {
     return this._selectedItems;
   }
 
-  protected Select(item: DropdownItem<any, any>): void {
-    if (this.config.multiSelect) {
-      if (this._selectedItems.has(item.id)) {
-        this._selectedItems.delete(item.id);
-      } else if (!this.config.multiSelectLimit || this._selectedItems.size < this.config.multiSelectLimit) {
-        this._selectedItems.set(item.id, item.data);
-      }
-      this.modelChange.emit(Array.from(this._selectedItems.values()));
-    } else {
-      this.modelChange.emit(item.data);
+  public Template(item: DropdownItem, alt?: string): TemplateRef<any> {
+    const templateName = item && item.templateName || alt;
+    if (templateName) {
+      const template = this.templates.find(tmpl => tmpl.Name === templateName);
+      return template && template.Template;
     }
-  }
-
-  /**
-   * Generate new groups Map, when items changed outside.
-   * Items without groupname add into `null` key array
-   */
-  protected ItemsChanged(): void {
-    const groups = new Map<string, DropdownItem<any, any>[]>();
-    this.items.forEach(item => {
-      const groupName = item.groupBy || null;
-      if (!groups.has(groupName)) {
-        groups.set(groupName, []);
-      }
-      groups.get(groupName).push(item);
-    });
-    this._groups = groups;
+    return null;
   }
 
   public Close(): void {
     this._open = false;
   }
 
+  protected GetItemName(item: any): string {
+    if (this.config.nameBy) {
+      return this.config.nameBy(item);
+    }
+    return null;
+  }
+
+  protected GetGroupName(item: any): string {
+    if (this.config.groupBy) {
+      return this.config.groupBy(item);
+    }
+    return null;
+  }
+
+  protected GetTemplateName(item: any): string {
+    if (this.config.templateBy) {
+      return this.config.templateBy(item);
+    }
+    return null;
+  }
+
+  protected GetValue(item: any): any {
+    if (this.config.valueBy) {
+      return this.config.valueBy(item);
+    } else {
+      return item;
+    }
+  }
+
+  protected IsSelected(value: any): boolean {
+    if (this.config.multiSelect) {
+      return this.model.find(selected => selected === value);
+    } else {
+      return this.model === value;
+    }
+  }
+
+  protected ModelChanged(): void {
+    // pass
+  }
+
+  protected ItemsChanged(): void {
+    this._ungroupedItems = this.items && this.items.map(item => {
+      return {
+        data: item,
+        value: this.GetValue(item),
+        name: this.GetItemName(item),
+        groupName: this.GetGroupName(item),
+        templateName: this.GetTemplateName(item),
+        selected: false,
+      } as DropdownItem;
+    });
+    const groups = new Map<string, DropdownItem[]>();
+    this._ungroupedItems.forEach(item => {
+      if (!groups.has(item.groupName)) {
+        groups.set(item.groupName, []);
+      }
+      groups.get(item.groupName).push(item);
+    });
+    this._groupedItems = groups;
+  }
+
+  protected UpdateSelected(): void {
+    this._selectedItems = this._ungroupedItems.filter(item => {
+      item.selected = this.IsSelected(item.data);
+      return item.selected;
+    });
+  }
+
+  protected OnClick(clicked: DropdownItem): void {
+    if (this.config.multiSelect) {
+      if (clicked.selected) {
+        clicked.selected = false;
+      } else if (!this.config.multiSelectLimit || this.model.length < this.config.multiSelectLimit) {
+        clicked.selected = true;
+      }
+      this.modelChange.emit(this._ungroupedItems.filter(item => item.selected).map(item => item.value));
+    } else {
+      this.modelChange.emit(clicked.value);
+    }
+  }
+
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.config) {
       this.config = Object.assign({}, DefaultConfig, this.config);
     }
-    if (changes.items) {
-      this.ItemsChanged();
+    if (changes.items || changes.model) {
+      if (changes.model) {
+        this.ModelChanged();
+      }
+      if (changes.items) {
+        this.ItemsChanged();
+      }
+      this.UpdateSelected();
     }
   }
 

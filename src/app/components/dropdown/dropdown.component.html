@@ -1,14 +1,19 @@
+<ng-template #defaultOption let-item>{{ item }}</ng-template>
+<ng-template #defaultTitle let-selected>{{ selected || config.placeholder }}</ng-template>
+
 <div class="dropdown" (clickOutside)="Close($event)">
-  <span>Selected:</span>
-  <br>
-  <div class="selected_item" *ngIf="!config.multiSelect">{{ model }}</div>
-  <div class="selected_items" *ngIf="config.multiSelect">
-    <div class="selected_badge" *ngFor="let item of model | limit: config.badgeLimit">{{ item }}</div>
+  <div class="selected_item" *ngIf="!config.multiSelect">
+    <ng-template [ngTemplateOutlet]="Template(Selected[0], 'title') || defaultTitle" [ngTemplateOutletContext]="{ $implicit: Selected[0]?.data }"></ng-template>
   </div>
-  <div class="option">
+  <div class="selected_items" *ngIf="config.multiSelect">
+    <div class="selected_badge" *ngFor="let item of model | limit: config.badgeLimit"></div>
+  </div>
+  <div class="options">
     <div class="group" *ngFor="let group of Groups | iterableMap">
       <div class="group_name" *ngIf="group.key">{{ group.key }}</div>
-      <div class="option" *ngFor="let item of group.value" (click)="Select(item)">{{ item.data }}</div>
+      <div class="option" *ngFor="let item of group.value" (click)="OnClick(item)">
+        <ng-template [ngTemplateOutlet]="Template(item, 'option') || defaultOption" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
+      </div>
     </div>
   </div>
 </div>

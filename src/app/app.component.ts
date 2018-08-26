@@ -12,39 +12,33 @@ import { Country } from './example/country.class';
 })
 export class AppComponent {
 
-  protected _items: any[];
-  protected _dropdownItems: DropdownItem<uuidv4, uuidv4>[];
-  protected _selected: uuidv4;
-  protected _selectedItems: uuidv4[];
+  protected _items: Place[];
+
+  public Selected;
 
   constructor() {
     this.Refresh();
   }
 
-  protected get Config(): DropdownConfig {
+  public get Items(): Place[] {
+    return this._items;
+  }
+
+  protected get SingleConfig(): DropdownConfig {
     return {
-      multiSelect: true,
+      templateBy: this.TemplateBy,
     };
   }
 
-  protected get Selected(): uuidv4 {
-    return this._selected;
+  protected get MultiConfig(): DropdownConfig {
+    return {
+      multiSelect: true,
+      templateBy: this.TemplateBy,
+    };
   }
 
-  protected set Selected(value: uuidv4) {
-    this._selected = value;
-  }
-
-  protected get SelectedItems(): uuidv4[] {
-    return this._selectedItems;
-  }
-
-  protected set SelectedItems(value: uuidv4[]) {
-    this._selectedItems = value;
-  }
-
-  protected get Items(): any[] {
-    return this._items;
+  public TemplateBy(item: Place): string {
+    return 'option';
   }
 
   public Refresh(): void {

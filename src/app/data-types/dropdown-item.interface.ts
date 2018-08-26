@@ -1,13 +1,11 @@
-export interface DropdownItem<K, T> {
+export interface DropdownItem {
 
-    id: K;
-    data: T;
+    data: any;
+    value: any;
+    selected: boolean;
 
     name?: string;
     templateName?: string;
-
-    groupBy?: string;
-    searchBy?: string;
-    sortBy?: number | string;
+    groupName?: string;
 
 }

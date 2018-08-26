@@ -5,12 +5,12 @@ import { Directive, Input, TemplateRef } from '@angular/core';
 })
 export class TemplateNameDirective {
 
-  @Input() private appTemplateName: string;
+  @Input() private templateName: string;
 
   constructor(private template: TemplateRef<any>) { }
 
   public get Name(): string {
-    return this.appTemplateName;
+    return this.templateName;
   }
 
   public get Template(): TemplateRef<any> {
