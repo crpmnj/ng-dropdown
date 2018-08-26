@@ -3,7 +3,7 @@
 
 <div class="dropdown" (clickOutside)="Close($event)">
   <div class="selected_item" *ngIf="!config.multiSelect">
-    <ng-template [ngTemplateOutlet]="Template(Selected[0], 'title') || defaultTitle" [ngTemplateOutletContext]="{ $implicit: Selected[0]?.data }"></ng-template>
+    <ng-template [ngTemplateOutlet]="Template(Selected, 'title') || defaultTitle" [ngTemplateOutletContext]="{ $implicit: Selected?.data }"></ng-template>
   </div>
   <div class="selected_items" *ngIf="config.multiSelect">
     <div class="selected_badge" *ngFor="let item of model | limit: config.badgeLimit"></div>

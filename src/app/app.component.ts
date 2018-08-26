@@ -33,7 +33,6 @@ export class AppComponent {
   protected get MultiConfig(): DropdownConfig {
     return {
       multiSelect: true,
-      templateBy: this.TemplateBy,
     };
   }
 

@@ -9,5 +9,12 @@
         <ng-template templateName="option" let-item>{{ item.country?.name }} {{ item.name }}</ng-template>
       </app-dropdown>
     </div>
+    <div class="tab">
+      <div class="title">Multiple choises</div>
+      <app-dropdown [items]="Items" [(model)]="Selected" [config]="MultiConfig">
+        <ng-template templateName="title" let-selected>{{ selected?.country?.name }} {{ selected?.name }}</ng-template>
+        <ng-template templateName="option" let-item>{{ item.country?.name }} {{ item.name }}</ng-template>
+      </app-dropdown>
+    </div>
   </div>
 </div>

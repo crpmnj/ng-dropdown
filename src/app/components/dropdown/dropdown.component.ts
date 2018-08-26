@@ -22,9 +22,10 @@ export class DropdownComponent implements OnChanges {
   @ContentChildren(TemplateNameDirective) templates: QueryList<TemplateNameDirective>;
 
   protected _open = false;
-  protected _selected = null;
 
+  protected _selected: DropdownItem;
   protected _selectedItems: DropdownItem[];
+
   protected _ungroupedItems: DropdownItem[];
   protected _groupedItems = new Map<string, DropdownItem[]>();
 
@@ -34,7 +35,11 @@ export class DropdownComponent implements OnChanges {
     return this._groupedItems;
   }
 
-  public get Selected(): DropdownItem[] {
+  public get Selected(): DropdownItem {
+    return this._selectedItems[0];
+  }
+
+  public get SelectedItems(): DropdownItem[] {
     return this._selectedItems;
   }
 
@@ -82,14 +87,10 @@ export class DropdownComponent implements OnChanges {
 
   protected IsSelected(value: any): boolean {
     if (this.config.multiSelect) {
-      return this.model.find(selected => selected === value);
+      return this.model && this.model.find(selected => selected === value);
     } else {
       return this.model === value;
     }
-  }
-
-  protected ModelChanged(): void {
-    // pass
   }
 
   protected ItemsChanged(): void {
@@ -138,9 +139,6 @@ export class DropdownComponent implements OnChanges {
       this.config = Object.assign({}, DefaultConfig, this.config);
     }
     if (changes.items || changes.model) {
-      if (changes.model) {
-        this.ModelChanged();
-      }
       if (changes.items) {
         this.ItemsChanged();
       }
