@@ -241,6 +241,7 @@ export class DropdownComponent implements OnChanges {
       });
       this._selectedItems = selected;
     } else {
+      this._selected = null;
       this._itemsMap.forEach(item => {
         item.selected = item.key === this.model;
         if (item.selected) {
