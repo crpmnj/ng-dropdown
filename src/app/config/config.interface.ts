@@ -1,8 +1,5 @@
 export interface DropdownConfig {
 
-    valueBy?: Function;
-
-    multiSelect?: boolean;
     multiSelectLimit?: number;
     badgeLimit?: number;
 

@@ -12,9 +12,11 @@ import { Country } from './example/country.class';
 })
 export class AppComponent {
 
-  protected _items: Place[];
+  protected _items: any[];
 
   public Selected;
+
+  public SelectedItems: any[];
 
   constructor() {
     this.Refresh();
@@ -24,36 +26,11 @@ export class AppComponent {
     return this._items;
   }
 
-  protected get SingleConfig(): DropdownConfig {
-    return {
-      templateBy: this.TemplateBy,
-    };
-  }
-
-  protected get MultiConfig(): DropdownConfig {
-    return {
-      multiSelect: true,
-    };
-  }
-
-  public TemplateBy(item: Place): string {
-    return 'option';
-  }
-
   public Refresh(): void {
-    const russia: Country = { id: uuidv4(), name: 'Россия' };
-    const belgium: Country = { id: uuidv4(), name: 'Бельгия' };
-    const france: Country = { id: uuidv4(), name: 'Франция' };
-    const items: Place[] = [];
-    items.push({ id: uuidv4(), name: 'Москва', country: russia });
-    items.push({ id: uuidv4(), name: 'Рязань', country: russia });
-    items.push({ id: uuidv4(), name: 'Санкт-Петербург', country: russia });
-    items.push({ id: uuidv4(), name: 'Казань', country: russia });
-    items.push({ id: uuidv4(), name: 'Париж', country: france });
-    items.push({ id: uuidv4(), name: 'Орлеан', country: france });
-    items.push({ id: uuidv4(), name: 'Лион', country: france });
-    items.push({ id: uuidv4(), name: 'Брюсель', country: belgium });
-    items.push({ id: uuidv4(), name: 'Брюгге', country: belgium });
+    const items = [];
+    for (let i = 0; i < 10; i++) {
+      items.push(uuidv4());
+    }
     this._items = items;
   }
 

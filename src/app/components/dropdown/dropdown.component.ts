@@ -12,22 +12,62 @@ import { DropdownItem } from '../../data-types/dropdown-item.interface';
 })
 export class DropdownComponent implements OnChanges {
 
+  /**
+   * Output selected item
+   */
   @Input() public model: any | any[];
   @Output() public modelChange: EventEmitter<any> = new EventEmitter<any>();
 
+  /**
+   * Input items
+   */
   @Input() public items: any[];
 
+  /**
+   * Function or string for calculate item value
+   */
+  @Input() public valueBy: Function | string;
+
+  /**
+   * A flag indicating that multiple selection enabled
+   * @default false
+   */
+  @Input() public multiple = false;
+
+  /**
+   * Configuration
+   */
   @Input() public config: DropdownConfig = DefaultConfig;
 
+  /**
+   * Received named templates
+   */
   @ContentChildren(TemplateNameDirective) templates: QueryList<TemplateNameDirective>;
 
+  /**
+   * A flag indicating that the list of options is visible
+   */
   protected _open = false;
 
-  protected _selected: DropdownItem;
-  protected _selectedItems: DropdownItem[];
+  /**
+   * Map of items where key is item value
+   */
+  protected _itemsMap: Map<any, DropdownItem> = new Map<any, DropdownItem>();
 
-  protected _ungroupedItems: DropdownItem[];
-  protected _groupedItems = new Map<string, DropdownItem[]>();
+  /**
+   * Grouped Map of items where key is items group
+   */
+  protected _groupedItems: Map<string, DropdownItem[]> = new Map<string, DropdownItem[]>();
+
+  /**
+   * Selected item when multiple selection disabled
+   */
+  protected _selected: DropdownItem;
+
+  /**
+   * Selected items when multiple selection enabled
+   */
+  protected _selectedItems: DropdownItem[];
 
   constructor(protected eRef: ElementRef) { }
 
@@ -36,101 +76,106 @@ export class DropdownComponent implements OnChanges {
   }
 
   public get Selected(): DropdownItem {
-    return this._selectedItems[0];
+    return this._selected;
   }
 
   public get SelectedItems(): DropdownItem[] {
     return this._selectedItems;
   }
 
-  public Template(item: DropdownItem, alt?: string): TemplateRef<any> {
-    const templateName = item && item.templateName || alt;
-    if (templateName) {
-      const template = this.templates.find(tmpl => tmpl.Name === templateName);
-      return template && template.Template;
-    }
-    return null;
-  }
-
+  /**
+   * Hide list of options
+   */
   public Close(): void {
     this._open = false;
   }
 
-  protected GetItemName(item: any): string {
-    if (this.config.nameBy) {
-      return this.config.nameBy(item);
+  protected Select(key): void {
+    if (this.multiple) {
+      if (this.model) {
+        if (this.model.indexOf && this.model.filter && this.model.concat) {
+          if (this.model.indexOf(key) === -1) {
+            this.modelChange.emit([...this.model, key]);
+          } else {
+            this.modelChange.emit(this.model.filter(item => item !== key));
+          }
+        } else {
+          throw new TypeError('Array expected');
+        }
+      } else {
+        this.modelChange.emit([key]);
+      }
+    } else {
+      this.modelChange.emit(key);
     }
-    return null;
-  }
-
-  protected GetGroupName(item: any): string {
-    if (this.config.groupBy) {
-      return this.config.groupBy(item);
-    }
-    return null;
-  }
-
-  protected GetTemplateName(item: any): string {
-    if (this.config.templateBy) {
-      return this.config.templateBy(item);
-    }
-    return null;
   }
 
   protected GetValue(item: any): any {
-    if (this.config.valueBy) {
-      return this.config.valueBy(item);
-    } else {
+    if (!this.valueBy) {
       return item;
+    } else if (typeof(this.valueBy) === 'string') {
+      return item[this.valueBy];
+    } else if (typeof(this.valueBy) === 'function') {
+      return this.valueBy(item);
+    } else {
+      throw new TypeError('String or Function expected');
     }
   }
 
-  protected IsSelected(value: any): boolean {
-    if (this.config.multiSelect) {
-      return this.model && this.model.find(selected => selected === value);
+  protected GetGroupname(item: any): string {
+    if (!this.config.groupBy) {
+      return null;
+    } else if (typeof(this.config.groupBy) === 'function') {
+      return this.config.groupBy(item);
     } else {
-      return this.model === value;
+      throw new TypeError('Function expected');
     }
   }
 
   protected ItemsChanged(): void {
-    this._ungroupedItems = this.items && this.items.map(item => {
-      return {
+    const map = new Map<any, DropdownItem>();
+    this.items.forEach(item => {
+      const key = this.GetValue(item);
+      map.set(key, {
         data: item,
-        value: this.GetValue(item),
-        name: this.GetItemName(item),
-        groupName: this.GetGroupName(item),
-        templateName: this.GetTemplateName(item),
+        key: key,
         selected: false,
-      } as DropdownItem;
+      });
     });
-    const groups = new Map<string, DropdownItem[]>();
-    this._ungroupedItems.forEach(item => {
-      if (!groups.has(item.groupName)) {
-        groups.set(item.groupName, []);
+    this._itemsMap = map;
+    this.GroupItems();
+  }
+
+  protected GroupItems(): void {
+    const map = new Map<string, DropdownItem[]>();
+    this._itemsMap.forEach((item, key) => {
+      const gname = this.GetGroupname(item);
+      item.groupName = gname;
+      if (!map.has(gname)) {
+        map.set(gname, []);
       }
-      groups.get(item.groupName).push(item);
+      map.get(gname).push(item);
     });
-    this._groupedItems = groups;
+    this._groupedItems = map;
   }
 
   protected UpdateSelected(): void {
-    this._selectedItems = this._ungroupedItems.filter(item => {
-      item.selected = this.IsSelected(item.data);
-      return item.selected;
-    });
-  }
-
-  protected OnClick(clicked: DropdownItem): void {
-    if (this.config.multiSelect) {
-      if (clicked.selected) {
-        clicked.selected = false;
-      } else if (!this.config.multiSelectLimit || this.model.length < this.config.multiSelectLimit) {
-        clicked.selected = true;
-      }
-      this.modelChange.emit(this._ungroupedItems.filter(item => item.selected).map(item => item.value));
+    if (this.multiple) {
+      const selected = [];
+      this._itemsMap.forEach(item => {
+        item.selected = this.model && this.model.indexOf && this.model.indexOf(item.key) !== -1;
+        if (item.selected) {
+          selected.push(item);
+        }
+      });
+      this._selectedItems = selected;
     } else {
-      this.modelChange.emit(clicked.value);
+      this._itemsMap.forEach(item => {
+        item.selected = item.key === this.model;
+        if (item.selected) {
+          this._selected = item;
+        }
+      });
     }
   }
 

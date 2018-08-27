@@ -1,7 +1,7 @@
 export interface DropdownItem {
 
     data: any;
-    value: any;
+    key: any;
     selected: boolean;
 
     name?: string;
