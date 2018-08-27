@@ -1,6 +1,6 @@
 export interface DropdownConfig {
 
-    multiSelectLimit?: number;
+    multipleLimit?: number;
     badgeLimit?: number;
 
     placeholder?: string;
@@ -9,5 +9,6 @@ export interface DropdownConfig {
     nameBy?: Function;
     templateBy?: Function;
     groupBy?: Function;
+    searchBy?: Function;
 
 }

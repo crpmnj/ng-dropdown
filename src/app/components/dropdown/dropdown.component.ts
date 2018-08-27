@@ -65,6 +65,11 @@ export class DropdownComponent implements OnChanges {
   protected _selected: DropdownItem;
 
   /**
+   * Search expression
+   */
+  protected _search = '';
+
+  /**
    * Selected items when multiple selection enabled
    */
   protected _selectedItems: DropdownItem[];
@@ -83,6 +88,14 @@ export class DropdownComponent implements OnChanges {
     return this._selectedItems;
   }
 
+  public get Search(): string {
+    return this._search;
+  }
+
+  public set Search(value: string) {
+    this._search = value;
+  }
+
   /**
    * Hide list of options
    */
@@ -90,26 +103,49 @@ export class DropdownComponent implements OnChanges {
     this._open = false;
   }
 
+  /**
+   * Returns template with target name
+   * @param tname Priority template name
+   * @param alt Alternative template name
+   */
+  public Template(tname: string, alt?: string): TemplateRef<any> {
+    let template = this.templates.find(tmpl => tmpl.Name === tname);
+    if (!template && alt) {
+      template = this.templates.find(tmpl => tmpl.Name === alt);
+    }
+    return template && template.Template;
+  }
+
+  /**
+   * Select or deselect item
+   * @param key Item key
+   */
   protected Select(key): void {
     if (this.multiple) {
       if (this.model) {
         if (this.model.indexOf && this.model.filter && this.model.concat) {
-          if (this.model.indexOf(key) === -1) {
-            this.modelChange.emit([...this.model, key]);
-          } else {
+          if (this.model.indexOf(key) > -1) {
             this.modelChange.emit(this.model.filter(item => item !== key));
+          } else if (!this.config.multipleLimit || this.model.length < this.config.multipleLimit) {
+            this.modelChange.emit([...this.model, key]);
           }
         } else {
           throw new TypeError('Array expected');
         }
       } else {
-        this.modelChange.emit([key]);
+        if (typeof(this.config.multipleLimit) === 'number' && this.config.multipleLimit > 0) {
+          this.modelChange.emit([key]);
+        }
       }
     } else {
       this.modelChange.emit(key);
     }
   }
 
+  /**
+   * Returns item value
+   * @param item Target item
+   */
   protected GetValue(item: any): any {
     if (!this.valueBy) {
       return item;
@@ -122,6 +158,10 @@ export class DropdownComponent implements OnChanges {
     }
   }
 
+  /**
+   * Returns item groupname
+   * @param item Target item
+   */
   protected GetGroupname(item: any): string {
     if (!this.config.groupBy) {
       return null;
@@ -132,6 +172,29 @@ export class DropdownComponent implements OnChanges {
     }
   }
 
+  protected GetTemplate(item: any): string {
+    if (!this.config.templateBy) {
+      return null;
+    } else if (typeof(this.config.templateBy) === 'function') {
+      return this.config.templateBy(item);
+    } else {
+      throw new TypeError('Function expected');
+    }
+  }
+
+  protected GetName(item: any): string {
+    if (!this.config.nameBy) {
+      return null;
+    } else if (typeof(this.config.nameBy) === 'function') {
+      return this.config.nameBy(item);
+    } else {
+      throw new TypeError('Function expected');
+    }
+  }
+
+  /**
+   * Generate new Map of dropdown items
+   */
   protected ItemsChanged(): void {
     const map = new Map<any, DropdownItem>();
     this.items.forEach(item => {
@@ -140,16 +203,21 @@ export class DropdownComponent implements OnChanges {
         data: item,
         key: key,
         selected: false,
+        templateName: this.GetTemplate(item),
+        name: this.GetName(item),
       });
     });
     this._itemsMap = map;
     this.GroupItems();
   }
 
+  /**
+   * Generate new Map of dropdown groups of items
+   */
   protected GroupItems(): void {
     const map = new Map<string, DropdownItem[]>();
-    this._itemsMap.forEach((item, key) => {
-      const gname = this.GetGroupname(item);
+    this._itemsMap.forEach(item => {
+      const gname = this.GetGroupname(item.data);
       item.groupName = gname;
       if (!map.has(gname)) {
         map.set(gname, []);
@@ -159,6 +227,9 @@ export class DropdownComponent implements OnChanges {
     this._groupedItems = map;
   }
 
+  /**
+   * Calculating `selected` property for every dropdown items
+   */
   protected UpdateSelected(): void {
     if (this.multiple) {
       const selected = [];

@@ -26,6 +26,14 @@ export class AppComponent {
     return this._items;
   }
 
+  public Group(item: any): string {
+    return item[0] % 2 === 0 ? 'Четные' : 'Нечетные';
+  }
+
+  public Filter(item: string, expr: string): boolean {
+    return expr ? item.toLowerCase().includes(expr.toLowerCase()) : true;
+  }
+
   public Refresh(): void {
     const items = [];
     for (let i = 0; i < 10; i++) {

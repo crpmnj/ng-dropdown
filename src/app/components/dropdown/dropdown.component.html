@@ -1,20 +1,32 @@
+<ng-template #defaultPlaceholder>{{ config.placeholder }}</ng-template>
+<ng-template #defaultTitle let-selected>{{ selected }}</ng-template>
+<ng-template #defaultBadge let-selected>{{ selected }}</ng-template>
 <ng-template #defaultOption let-item>{{ item }}</ng-template>
-<ng-template #defaultTitle let-selected>{{ selected || config.placeholder }}</ng-template>
 
 <div class="dropdown" (clickOutside)="Close($event)">
   <div class="selected_item" *ngIf="!multiple">
-    {{ Selected?.data || config.placeholder }}
+    <div class="placeholder" *ngIf="!Selected">
+      <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
+    </div>
+    <span *ngIf="Selected">{{ Selected?.data }}</span>
   </div>
   <div class="selected_items" *ngIf="multiple">
-    <div class="placeholder" *ngIf="!SelectedItems.length">{{ config.placeholder }}</div>
-    <div class="badge" *ngFor="let item of SelectedItems">{{ item.data }}</div>
+    <div class="placeholder" *ngIf="!SelectedItems.length">
+      <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
+    </div>
+    <div class="badges">
+      <div class="badge" *ngFor="let item of SelectedItems">
+        <ng-template [ngTemplateOutlet]="Template(item.templateName, 'badge') || defaultBadge" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
+      </div>
+    </div>
   </div>
   <br>
   <div class="options">
-    <div class="group" *ngFor="let group of Groups | iterableMap">
-      <div class="group_name" *ngIf="group.key">{{ group.key }}</div>
+    <div class="search" *ngIf="config.searchBy"><input type="text" [(ngModel)]="Search"></div>
+    <div class="group" *ngFor="let group of Groups | filterMapValue: config.searchBy:Search">
+      <div class="group_name" *ngIf="group.key && group.value.length">{{ group.key }}</div>
       <div class="option" *ngFor="let item of group.value" (click)="Select(item.key)">
-        {{ item.data }}
+        <ng-template [ngTemplateOutlet]="Template(item.templateName, 'option') || defaultOption" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
       </div>
     </div>
   </div>
