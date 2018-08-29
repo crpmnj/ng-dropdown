@@ -43,6 +43,7 @@ export class AppComponent {
     for (let i = 0; i < 10; i++) {
       items.push({ id: uuidv4(), Title: uuidv4() });
     }
+    this.SelectedItems = [items[1], items[4], items[0]];
     this._items = items;
   }
 
