@@ -5,6 +5,7 @@
     <div class="tab">
       <div class="title">Single choise</div>
       <app-dropdown [items]="Items" [(model)]="Selected" [config]="{ groupBy: Group, searchBy: Filter, templateBy: Template }">
+        <ng-template templateName="placeholder">Выберите элементfffffffffffffffffffffffffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddddddddddddddddddddddddfffffffffffffffffffffff</ng-template>
         <ng-template templateName="super" let-item>{{ item.Title }}</ng-template>
       </app-dropdown>
     </div>

@@ -3,32 +3,33 @@
 <ng-template #defaultBadge let-selected>{{ selected }}</ng-template>
 <ng-template #defaultOption let-item>{{ item }}</ng-template>
 
-<div class="dropdown" (clickOutside)="Close($event)">
-  <div class="selected_item" *ngIf="!multiple">
-    <div class="placeholder" *ngIf="!Selected">
-      <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
-    </div>
-    <div class="title" *ngIf="Selected">
-      <ng-template [ngTemplateOutlet]="Template(Selected.templateName, 'title', 'option') || defaultTitle" [ngTemplateOutletContext]="{ $implicit: Selected.data }"></ng-template>
-    </div>
-  </div>
-  <div class="selected_items" *ngIf="multiple">
-    <div class="placeholder" *ngIf="!SelectedItems.length">
-      <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
-    </div>
-    <div class="badges">
-      <div class="badge" *ngFor="let item of SelectedItems | limit: config.badgeLimit">
-        <ng-template [ngTemplateOutlet]="Template(item.templateName, 'badge', 'option') || defaultBadge" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
+<div class="dropdown" (clickOutside)="Close($event)" [ngClass]="{ open: _open }">
+  <div class="dropdown-manage" (click)="Toggle()">
+    <div class="selected_item" *ngIf="!multiple">
+      <div class="placeholder" *ngIf="!Selected">
+        <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
       </div>
-      <div class="limit_badge" *ngIf="SelectedCount > config.badgeLimit">+{{ SelectedCount - config.badgeLimit }}</div>
+      <div class="title" *ngIf="Selected">
+        <ng-template [ngTemplateOutlet]="Template(Selected.templateName, 'title', 'option') || defaultTitle" [ngTemplateOutletContext]="{ $implicit: Selected.data }"></ng-template>
+      </div>
+    </div>
+    <div class="selected_items" *ngIf="multiple">
+      <div class="placeholder" *ngIf="!SelectedItems.length">
+        <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
+      </div>
+      <div class="badges">
+        <div class="badge" *ngFor="let item of SelectedItems | limit: config.badgeLimit">
+          <ng-template [ngTemplateOutlet]="Template(item.templateName, 'badge', 'option') || defaultBadge" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
+        </div>
+        <div class="limit_badge" *ngIf="SelectedCount > config.badgeLimit">+{{ SelectedCount - config.badgeLimit }}</div>
+      </div>
     </div>
   </div>
-  <br>
-  <div class="options">
+  <div class="dropdown-options">
     <div class="search" *ngIf="config.searchBy"><input type="text" [(ngModel)]="Search"></div>
-    <div class="group" *ngFor="let group of Groups">
-      <div class="group_name" *ngIf="group[0]">{{ group[0] }}</div>
-      <div class="option" *ngFor="let item of group[1]" (click)="Select(item.key)">
+    <div class="group" *ngFor="let group of Groups | iterableMap">
+      <div class="group_name" *ngIf="group.key">{{ group.key }}</div>
+      <div class="option" *ngFor="let item of group.value" (click)="Select(item.key)">
         <ng-template [ngTemplateOutlet]="Template(item.templateName, 'option') || defaultOption" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
       </div>
     </div>

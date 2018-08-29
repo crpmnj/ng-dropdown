@@ -76,8 +76,8 @@ export class DropdownComponent implements OnChanges {
 
   constructor(protected eRef: ElementRef) { }
 
-  public get Groups(): any[] {
-    return Array.from(this._groupedItems.entries());
+  public get Groups(): Map<string, DropdownItem[]> {
+    return this._groupedItems;
   }
 
   public get Selected(): DropdownItem {
@@ -110,6 +110,14 @@ export class DropdownComponent implements OnChanges {
    */
   public Close(): void {
     this._open = false;
+  }
+
+  public Open(): void {
+    this._open = true;
+  }
+
+  public Toggle(): void {
+    this._open = !this._open;
   }
 
   /**
@@ -150,6 +158,7 @@ export class DropdownComponent implements OnChanges {
       }
     } else {
       this.modelChange.emit(key);
+      this.Close();
     }
   }
 
