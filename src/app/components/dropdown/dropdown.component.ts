@@ -76,8 +76,8 @@ export class DropdownComponent implements OnChanges {
 
   constructor(protected eRef: ElementRef) { }
 
-  public get Groups(): Map<string, DropdownItem[]> {
-    return this._groupedItems;
+  public get Groups(): any[] {
+    return Array.from(this._groupedItems.entries());
   }
 
   public get Selected(): DropdownItem {
@@ -88,12 +88,21 @@ export class DropdownComponent implements OnChanges {
     return this._selectedItems;
   }
 
+  public get SelectedCount(): number {
+    return this._selectedItems.length;
+  }
+
   public get Search(): string {
     return this._search;
   }
 
   public set Search(value: string) {
     this._search = value;
+    this.GroupItems();
+  }
+
+  public get GroupsCount(): number {
+    return this._groupedItems.size;
   }
 
   /**
@@ -108,10 +117,12 @@ export class DropdownComponent implements OnChanges {
    * @param tname Priority template name
    * @param alt Alternative template name
    */
-  public Template(tname: string, alt?: string): TemplateRef<any> {
+  public Template(tname: string, ...alt): TemplateRef<any> {
     let template = this.templates.find(tmpl => tmpl.Name === tname);
-    if (!template && alt) {
-      template = this.templates.find(tmpl => tmpl.Name === alt);
+    if (!template && alt.length) {
+      template = alt.reduce((res, name) => {
+        return res || this.templates.find(tmpl => tmpl.Name === name);
+      }, null);
     }
     return template && template.Template;
   }
@@ -133,7 +144,7 @@ export class DropdownComponent implements OnChanges {
           throw new TypeError('Array expected');
         }
       } else {
-        if (typeof(this.config.multipleLimit) === 'number' && this.config.multipleLimit > 0) {
+        if (this.config.multipleLimit === undefined || this.config.multipleLimit > 0) {
           this.modelChange.emit([key]);
         }
       }
@@ -192,6 +203,14 @@ export class DropdownComponent implements OnChanges {
     }
   }
 
+  protected Filter(item: any): boolean {
+    if (this.config.searchBy && this._search.length > 0) {
+      return this.config.searchBy(item, this._search);
+    } else {
+      return true;
+    }
+  }
+
   /**
    * Generate new Map of dropdown items
    */
@@ -217,6 +236,9 @@ export class DropdownComponent implements OnChanges {
   protected GroupItems(): void {
     const map = new Map<string, DropdownItem[]>();
     this._itemsMap.forEach(item => {
+      if (!this.Filter(item.data)) {
+        return;
+      }
       const gname = this.GetGroupname(item.data);
       item.groupName = gname;
       if (!map.has(gname)) {

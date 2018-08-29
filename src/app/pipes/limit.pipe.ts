@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class LimitPipe implements PipeTransform {
 
-  transform(array: any[], count?: number): any[] {
-    return count ? array.slice(0, count) : array;
+  transform(array: any[], limit?: number): any[] {
+    return limit ? array.slice(0, limit) : array;
   }
 
 }
