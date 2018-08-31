@@ -52,24 +52,6 @@ $color-light_blue: rgb(9, 140, 207);
     }
 }
 
-.dropdown-options {
-    background-color: #fff;
-    border-radius: 3px;
-    border: 1px solid $color-gray;
-    box-sizing: border-box;
-    margin-top: 10px;
-    max-height: 240px;
-    opacity: 0;
-    overflow-y: auto;
-    padding: 8px 0;
-    position: absolute;
-    transition: .2s margin, .2s opacity, .2s visibility;
-    user-select: none;
-    visibility: hidden;
-    width: 100%;
-    z-index: 10;
-}
-
 .badges {
     align-items: center;
     display: flex;
@@ -115,4 +97,57 @@ $color-light_blue: rgb(9, 140, 207);
             }
         }
     }
+    .limit_badge {
+        color: $color-gray;
+        margin-left: 6px;
+    }
+}
+
+.dropdown-options {
+    background-color: #fff;
+    border-radius: 3px;
+    border: 1px solid $color-gray;
+    box-sizing: border-box;
+    margin-top: 10px;
+    max-height: 240px;
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 4px 0 8px;
+    position: absolute;
+    transition: .2s margin, .2s opacity, .2s visibility;
+    user-select: none;
+    visibility: hidden;
+    width: 100%;
+    z-index: 10;
+    .search {
+        input {
+            border: none;
+            box-sizing: border-box;
+            outline: none;
+            padding: 6px;
+            width: 100%;
+        }
+        border-bottom: 1px solid $color-gray;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+    }
+    .group_name {
+        color: $color-gray;
+        margin: 10px 0 4px 6px;
+    }
+    .option {
+        padding: 3px 6px;
+        &:hover, &.selected {
+            background-color: $color-light_blue;
+            color: white;
+
+        }
+    }
+}
+
+.empty {
+    color: $color-gray;
+    padding: 8px;
+    text-align: center;
 }

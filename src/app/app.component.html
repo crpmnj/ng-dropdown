@@ -10,8 +10,8 @@
     </div>
     <div class="tab">
       <div class="title">Multiple choise</div>
-      <app-dropdown [items]="Items" [(model)]="SelectedItems" [multiple]="true" [config]="{ multipleLimit: 3, searchBy: Filter }">
-        <ng-template templateName="placeholder">Выберите 1 элемент</ng-template>
+      <app-dropdown [items]="Items" [(model)]="SelectedItems" [multiple]="true" [config]="{ multipleLimit: 5, searchBy: Filter, badgeLimit: 3 }">
+        <ng-template templateName="placeholder">Выберите 5 элементов</ng-template>
         <ng-template templateName="option" let-item>{{ item.Title }}</ng-template>
       </app-dropdown>
     </div>
