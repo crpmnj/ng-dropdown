@@ -1,6 +1,8 @@
 $color-gray: rgba(0,0,0,.2);
+$color-light_blue: rgb(9, 140, 207);
 
 .dropdown {
+    font-size: 14px;
     position: relative;
     &.open {
         .dropdown-manage {
@@ -18,10 +20,12 @@ $color-gray: rgba(0,0,0,.2);
 }
 
 .dropdown-manage {
+    align-items: center;
     border-radius: 3px;
     border: 1px solid $color-gray;
     display: flex;
-    padding: 8px 32px 8px 8px;
+    height: 2rem;
+    padding: 0 32px 0 8px;
     position: relative;
     & > div {
         flex: 1;
@@ -64,4 +68,51 @@ $color-gray: rgba(0,0,0,.2);
     visibility: hidden;
     width: 100%;
     z-index: 10;
+}
+
+.badges {
+    align-items: center;
+    display: flex;
+    .badge {
+        align-items: center;
+        background-color: $color-light_blue;
+        border-radius: 3px;
+        border: 1px solid rgba(0,0,0,.1);
+        color: white;
+        display: flex;
+        margin-left: 6px;
+        padding: 2px 4px;
+        &:first-of-type {
+            margin-left: 0;
+        }
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .remove {
+            cursor: pointer;
+            margin: 0 1px 0 3px;
+            opacity: .5;
+            padding: 6px;
+            position: relative;
+            &:hover {
+                opacity: 1;
+            }
+            &:after, &:before {
+                background-color: white;
+                content: '';
+                height: 1px;
+                position: absolute;
+                right: 2px;
+                width: 8px;
+            }
+            &:after {
+                transform: rotate(45deg);
+            }
+            &:before {
+                transform: rotate(-45deg);
+            }
+        }
+    }
 }

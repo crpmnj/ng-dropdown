@@ -11,4 +11,6 @@ export interface DropdownConfig {
     groupBy?: Function;
     searchBy?: Function;
 
+    badge_width?: string;
+
 }

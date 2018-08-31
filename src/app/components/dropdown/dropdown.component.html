@@ -1,6 +1,6 @@
 <ng-template #defaultPlaceholder>{{ config.placeholder }}</ng-template>
 <ng-template #defaultTitle let-selected>{{ selected }}</ng-template>
-<ng-template #defaultBadge let-selected>{{ selected }}</ng-template>
+<ng-template #defaultBadge let-badge>{{ badge }}</ng-template>
 <ng-template #defaultOption let-item>{{ item }}</ng-template>
 
 <div class="dropdown" (clickOutside)="Close($event)" [ngClass]="{ open: _open }">
@@ -18,8 +18,9 @@
         <ng-template [ngTemplateOutlet]="Template('placeholder') || defaultPlaceholder"></ng-template>
       </div>
       <div class="badges">
-        <div class="badge" *ngFor="let item of SelectedItems | limit: config.badgeLimit">
-          <ng-template [ngTemplateOutlet]="Template(item.templateName, 'badge', 'option') || defaultBadge" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template>
+        <div class="badge" *ngFor="let item of SelectedItems | limit: config.badgeLimit; let last = last" [ngStyle]="{ 'max-width': config.badge_width }">
+          <span><ng-template [ngTemplateOutlet]="Template(item.templateName, 'badge', 'option') || defaultBadge" [ngTemplateOutletContext]="{ $implicit: item.data }"></ng-template></span>
+          <div class="remove" (click)="Select(item.key)"></div>
         </div>
         <div class="limit_badge" *ngIf="SelectedCount > config.badgeLimit">+{{ SelectedCount - config.badgeLimit }}</div>
       </div>
