@@ -33,3 +33,18 @@ export class AppModule { }
     <ng-template templateName="super" let-item>{{ item.Title }}</ng-template>
 </ng-dropdown>
 ```
+`app.component.ts`
+
+```typescript
+public Template(item: any): string {
+  return 'super';
+}
+
+public Group(item: any): string {
+  return item.Title[0] % 2 === 0 ? 'Event' : 'Odd';
+}
+
+public Filter(item: any, expr: string): boolean {
+  return expr ? item.Title.toLowerCase().includes(expr.toLowerCase()) : true;
+}
+```
