@@ -1,3 +1,5 @@
+export { DropdownModule } from './src/app/dropdown-module/dropdown.module';
+
 export { ClickOutsideDirective } from './src/app/dropdown-module/directives/click-outside.directive';
 export { TemplateNameDirective } from './src/app/dropdown-module/directives/template-name.directive';
 
