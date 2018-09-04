@@ -1,9 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Component } from '@angular/core';
-import { DropdownItem } from './data-types/dropdown-item.interface';
-import { DropdownConfig } from './config/config.interface';
 import { Place } from './example/place.class';
-import { Country } from './example/country.class';
 
 @Component({
   selector: 'app-root',

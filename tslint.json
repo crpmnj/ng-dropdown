@@ -126,6 +126,7 @@
       true,
       "element",
       "app",
+      "ng",
       "kebab-case"
     ],
     "no-output-on-prefix": true,

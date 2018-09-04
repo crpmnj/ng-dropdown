@@ -4,16 +4,16 @@
   <div class="tabs">
     <div class="tab">
       <div class="title">Single choise</div>
-      <app-dropdown [items]="Items" [(model)]="Selected" [config]="{ groupBy: Group, searchBy: Filter, templateBy: Template }">
+      <ng-dropdown [items]="Items" [(model)]="Selected" [config]="{ groupBy: Group, searchBy: Filter, templateBy: Template }">
         <ng-template templateName="super" let-item>{{ item.Title }}</ng-template>
-      </app-dropdown>
+      </ng-dropdown>
     </div>
     <div class="tab">
       <div class="title">Multiple choise</div>
-      <app-dropdown [items]="Items" [(model)]="SelectedItems" [multiple]="true" [config]="{ multipleLimit: 5, searchBy: Filter, badgeLimit: 3 }">
+      <ng-dropdown [items]="Items" [(model)]="SelectedItems" [multiple]="true" [config]="{ multipleLimit: 5, searchBy: Filter, badgeLimit: 3 }">
         <ng-template templateName="placeholder">Выберите 5 элементов</ng-template>
         <ng-template templateName="option" let-item>{{ item.Title }}</ng-template>
-      </app-dropdown>
+      </ng-dropdown>
     </div>
   </div>
 </div>

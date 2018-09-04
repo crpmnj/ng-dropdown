@@ -6,7 +6,7 @@ import { DropdownConfig } from '../../config/config.interface';
 import { DropdownItem } from '../../data-types/dropdown-item.interface';
 
 @Component({
-  selector: 'app-dropdown',
+  selector: 'ng-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss']
 })

@@ -1,11 +1,13 @@
-export { TemplateNameDirective } from './directives/template-name.directive';
-export { ClickOutsideDirective } from './directives/click-outside.directive';
+export { ClickOutsideDirective } from './dropdown-module/directives/click-outside.directive';
+export { TemplateNameDirective } from './dropdown-module/directives/template-name.directive';
 
-export { DropdownComponent } from './components/dropdown/dropdown.component';
+export { DropdownComponent } from './dropdown-module/components/dropdown/dropdown.component';
 
-export { DropdownItem } from './data-types/dropdown-item.interface';
+export { DropdownItem } from './dropdown-module/data-types/dropdown-item.interface';
 
-export { IterableMapPipe } from './pipes/iterable-map.pipe';
-export { LimitPipe } from './pipes/limit.pipe';
+export { IterableMapPipe } from './dropdown-module/pipes/iterable-map.pipe';
+export { LimitPipe } from './dropdown-module/pipes/limit.pipe';
+export { FilterMapValuePipe } from './dropdown-module/pipes/filter-map-value.pipe';
 
-export { DropdownConfig } from './config/config.interface';
+export { DropdownConfig } from './dropdown-module/config/config.interface';
+export { DefaultConfig } from './dropdown-module/config/default.config';
