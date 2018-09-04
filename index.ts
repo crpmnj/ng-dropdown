@@ -1,1 +1,10 @@
-export * from './src/app/dropdown-module/dropdown.module';
+export { DropdownModule } from './dist/app/dropdown-module/dropdown.module';
+export { ClickOutsideDirective } from './dist/app/dropdown-module/directives/click-outside.directive';
+export { TemplateNameDirective } from './dist/app/dropdown-module/directives/template-name.directive';
+export { DropdownComponent } from './dist/app/dropdown-module/components/dropdown/dropdown.component';
+export { DropdownItem } from './dist/app/dropdown-module/data-types/dropdown-item.interface';
+export { IterableMapPipe } from './dist/app/dropdown-module/pipes/iterable-map.pipe';
+export { LimitPipe } from './dist/app/dropdown-module/pipes/limit.pipe';
+export { FilterMapValuePipe } from './dist/app/dropdown-module/pipes/filter-map-value.pipe';
+export { DropdownConfig } from './dist/app/dropdown-module/config/config.interface';
+export { DefaultConfig } from './dist/app/dropdown-module/config/default.config';
