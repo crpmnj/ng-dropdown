@@ -9,7 +9,7 @@ $ npm install @malekp/ng-dropdown
 
 # Usage
 
-### `app.module.ts`
+`app.module.ts`
 
 ```typescript
 @NgModule({
@@ -26,7 +26,7 @@ $ npm install @malekp/ng-dropdown
 })
 export class AppModule { }
 ```
-### `app.component.html`
+`app.component.html`
 
 ```html
 <ng-dropdown [items]="Items" [(model)]="Selected" [config]="{ groupBy: Group, searchBy: Filter, templateBy: Template }">
