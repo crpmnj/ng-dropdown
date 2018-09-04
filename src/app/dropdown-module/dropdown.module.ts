@@ -9,27 +9,22 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { LimitPipe } from './pipes/limit.pipe';
 import { FilterMapValuePipe } from './pipes/filter-map-value.pipe';
 
+const components: any[] = [
+    TemplateNameDirective,
+    IterableMapPipe,
+    ClickOutsideDirective,
+    LimitPipe,
+    FilterMapValuePipe,
+    DropdownComponent,
+];
+
 @NgModule({
-    declarations: [
-        TemplateNameDirective,
-        IterableMapPipe,
-        ClickOutsideDirective,
-        LimitPipe,
-        FilterMapValuePipe,
-        DropdownComponent,
-    ],
+    declarations: components,
     imports: [
         FormsModule,
         BrowserModule
     ],
-    exports: [
-        TemplateNameDirective,
-        IterableMapPipe,
-        ClickOutsideDirective,
-        LimitPipe,
-        FilterMapValuePipe,
-        DropdownComponent,
-    ],
+    exports: components,
     providers: [],
     bootstrap: []
 })

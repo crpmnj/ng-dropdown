@@ -15,10 +15,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prepublish": "tsc",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "packagr": "ng-packagr -p ng-package.json"
   },
   "dependencies": {
     "@angular/animations": "^5.2.0",
