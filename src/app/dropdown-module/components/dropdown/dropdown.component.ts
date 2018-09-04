@@ -76,6 +76,10 @@ export class DropdownComponent implements OnChanges {
 
   constructor(protected eRef: ElementRef) { }
 
+  public get IsOpen(): boolean {
+    return this._open;
+  }
+
   public get Groups(): Map<string, DropdownItem[]> {
     return this._groupedItems;
   }

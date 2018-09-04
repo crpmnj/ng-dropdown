@@ -3,7 +3,7 @@
 <ng-template #defaultBadge let-badge>{{ badge }}</ng-template>
 <ng-template #defaultOption let-item>{{ item }}</ng-template>
 
-<div class="dropdown" (clickOutside)="Close($event)" [ngClass]="{ open: _open }">
+<div class="dropdown" (clickOutside)="Close()" [ngClass]="{ open: IsOpen }">
   <div class="dropdown-manage" (click)="Toggle()">
     <div class="selected_item" *ngIf="!multiple">
       <div class="placeholder" *ngIf="!Selected">
