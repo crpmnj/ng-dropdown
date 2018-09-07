@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DropdownModule } from './dropdown-module/dropdown.module';
@@ -12,7 +11,6 @@ import { DropdownModule } from './dropdown-module/dropdown.module';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     DropdownModule
   ],
   providers: [],

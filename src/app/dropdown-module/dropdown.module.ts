@@ -1,5 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { TemplateNameDirective } from './directives/template-name.directive';
@@ -22,10 +22,15 @@ const components: any[] = [
     declarations: components,
     imports: [
         FormsModule,
-        BrowserModule
+        CommonModule
     ],
-    exports: components,
-    providers: [],
-    bootstrap: []
+    exports: components
 })
-export class DropdownModule { }
+export class DropdownModule {
+    static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: DropdownModule,
+            providers: []
+        };
+    }
+}

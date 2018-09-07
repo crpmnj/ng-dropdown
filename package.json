@@ -5,6 +5,7 @@
   "license": "GPL-3.0",
   "repository": "crpmnj/ng-dropdown",
   "main": "index.js",
+  "private": false,
   "keywords": [
     "dropdown",
     "custom",
@@ -15,12 +16,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prepublish": "tsc",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "packagr": "ng-packagr -p ng-package.json"
+    "e2e": "ng e2e"
   },
   "dependencies": {
     "@angular/animations": "^5.2.0",
