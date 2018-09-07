@@ -1,6 +1,6 @@
 {
   "name": "@malekp/ng-dropdown",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Simple component for Angular 2 to use custom dropdown menu",
   "license": "GPL-3.0",
   "repository": "crpmnj/ng-dropdown",
